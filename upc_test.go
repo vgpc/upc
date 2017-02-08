@@ -12,7 +12,7 @@ type breakdown struct {
 	isCoupon        bool
 	manufacturer    string
 	product         int
-	ndc             int
+	ndc             string
 	family          int
 	coupon          int
 }
@@ -24,6 +24,22 @@ var tests = map[string]breakdown{
 		isGlobalProduct: true,
 		manufacturer:    "045496",
 		product:         83043,
+	},
+	"298765432109": {
+		numberSystem: 2,
+		checkDigit:   9,
+		isLocal:      true,
+	},
+	"412345678903": {
+		numberSystem: 4,
+		checkDigit:   3,
+		isLocal:      true,
+	},
+	"363824057361": {
+		numberSystem: 3,
+		checkDigit:   1,
+		isDrug:       true,
+		ndc:          "6382405736",
 	},
 }
 
@@ -44,12 +60,16 @@ func getBreakdown(s string) (Upc, breakdown) {
 		b.numberSystem = u.NumberSystem()
 		b.checkDigit = u.CheckDigit()
 		b.isGlobalProduct = u.IsGlobalProduct()
-		// b.isDrug = u.IsDrug()
-		// b.isLocal = u.IsLocal()
+		b.isDrug = u.IsDrug()
+		b.isLocal = u.IsLocal()
 		// b.isCoupon = u.IsCoupon()
-		b.manufacturer = u.Manufacturer()
-		b.product = u.Product()
-		// b.ndc = u.Ndc()
+		if b.isGlobalProduct {
+			b.manufacturer = u.Manufacturer()
+			b.product = u.Product()
+		}
+		if b.isDrug {
+			b.ndc = u.Ndc()
+		}
 		// b.family = u.Family()
 		// b.coupon = u.Coupon()
 	} else {

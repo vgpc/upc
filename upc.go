@@ -71,9 +71,8 @@ func (u Upc) NumberSystem() int {
 }
 
 // IsGlobalProduct returns true if the number system is 0, 1, 6, 7, 8
-// or 9.  A UPC with one of these number systems is intended for
-// global use with products (in contrast to local use or coupon use,
-// etc.)
+// or 9.  These UPCs are intended for global use with products (in
+// contrast to local use or coupon use, etc.)
 func (u Upc) IsGlobalProduct() bool {
 	switch u.NumberSystem() {
 	case 0, 1, 6, 7, 8, 9:
@@ -81,6 +80,24 @@ func (u Upc) IsGlobalProduct() bool {
 	default:
 		return false
 	}
+}
+
+// IsLocal returns true if the number system is 2 or 4.  These UPCs
+// are intended for local/warehouse use.
+func (u Upc) IsLocal() bool {
+	switch u.NumberSystem() {
+	case 2, 4:
+		return true
+	default:
+		return false
+	}
+}
+
+// IsDrug returns true if the number system is 3.  These UPCs are
+// intended for labeling drugs by their National Drug Council number.
+// See Ndc method.
+func (u Upc) IsDrug() bool {
+	return u.NumberSystem() == 3
 }
 
 // Manufacturer returns the 6-digit manufacturer code assigned by a
@@ -93,4 +110,15 @@ func (u Upc) Manufacturer() string {
 // Product returns the product code assigned by a manufacturer.
 func (u Upc) Product() int {
 	return int(u % 100000)
+}
+
+// Ndc returns the National Drug Code associated with a UPC.  The
+// value is only meaningful if IsDrug returns true for the UPC.
+//
+// The value is a string because leading zeros are meaningful in the
+// FDA database of labeler codes.  No attempt is made to put the NDC
+// code into standard format with dashes.
+func (u Upc) Ndc() string {
+	full := fmt.Sprintf("%011d", u)
+	return full[1:]
 }
