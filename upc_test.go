@@ -89,3 +89,9 @@ func getBreakdown(s string) (Upc, breakdown) {
 
 	return u, b
 }
+
+func BenchmarkParse(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		Parse("045496830434")
+	}
+}
