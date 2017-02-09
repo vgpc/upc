@@ -21,7 +21,7 @@ Package upc provides for parsing, validating and analyzing a UPC
 		} else if u.IsCoupon() {
 			fmt.Printf("Manufacturer code: %s\n", u.Manufacturer())
 			fmt.Printf("Family code: %d\n", u.Family())
-			fmt.Printf("Coupon code: %d\n", u.Coupon())
+			fmt.Printf("Coupon value: $0.%02d\n", u.Value())
 		} else {
 			panic("Preceeding categories are exhaustive")
 		}

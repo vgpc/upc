@@ -23,7 +23,7 @@ if err == upc.ErrInvalidCheckDigit {
     } else if u.IsCoupon() {
         fmt.Printf("Manufacturer code: %d\n", u.Manufacturer())
         fmt.Printf("Family code: %d\n", u.Family())
-        fmt.Printf("Coupon code: %d\n", u.Coupon())
+        fmt.Printf("Coupon value: $0.%02d\n", u.Value())
     } else {
         panic("Preceeding categories are exhaustive")
     }

@@ -100,11 +100,22 @@ func (u Upc) IsDrug() bool {
 	return u.NumberSystem() == 3
 }
 
+// IsCoupon returns true if the number system is 5.  These UPCs are
+// intended for labeling coupons.  See Family and Value methods.
+func (u Upc) IsCoupon() bool {
+	return u.NumberSystem() == 5
+}
+
 // Manufacturer returns the 6-digit manufacturer code assigned by a
 // GS1 organization.  The return value is a string because leading
-// zeros are used for lookups in the standard GS1 databases.
+// zeros are used for lookups in the standard GS1 databases. In the
+// case of coupons, the manufacturer is only 5 digits long.
 func (u Upc) Manufacturer() string {
-	return fmt.Sprintf("%06d", u/100000)
+	if u.NumberSystem() == 5 {
+		return fmt.Sprintf("%05d", (u/100000)%100000)
+	} else {
+		return fmt.Sprintf("%06d", u/100000)
+	}
 }
 
 // Product returns the product code assigned by a manufacturer.
@@ -121,4 +132,16 @@ func (u Upc) Product() int {
 func (u Upc) Ndc() string {
 	full := fmt.Sprintf("%011d", u)
 	return full[1:]
+}
+
+// Family returns the coupon manufacturer's family code.  It
+// designates the kind of products to which the coupon applies.
+func (u Upc) Family() int {
+	return int((u % 100000) / 100)
+}
+
+// Value returns the coupon value in pennies.  This is the amount
+// saved by applying the coupon.  The value is always less than 100.
+func (u Upc) Value() int {
+	return int(u % 100)
 }

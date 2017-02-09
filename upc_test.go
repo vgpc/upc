@@ -14,11 +14,11 @@ type breakdown struct {
 	product         int
 	ndc             string
 	family          int
-	coupon          int
+	value           int
 }
 
 var tests = map[string]breakdown{
-	"045496830434": {
+	"045496830434": { // EarthBound for SNES
 		numberSystem:    0,
 		checkDigit:      4,
 		isGlobalProduct: true,
@@ -35,11 +35,19 @@ var tests = map[string]breakdown{
 		checkDigit:   3,
 		isLocal:      true,
 	},
-	"363824057361": {
+	"363824057361": { // Mucinex D
 		numberSystem: 3,
 		checkDigit:   1,
 		isDrug:       true,
 		ndc:          "6382405736",
+	},
+	"512345678900": {
+		numberSystem: 5,
+		checkDigit:   0,
+		isCoupon:     true,
+		manufacturer: "12345",
+		family:       678,
+		value:        90,
 	},
 }
 
@@ -62,7 +70,7 @@ func getBreakdown(s string) (Upc, breakdown) {
 		b.isGlobalProduct = u.IsGlobalProduct()
 		b.isDrug = u.IsDrug()
 		b.isLocal = u.IsLocal()
-		// b.isCoupon = u.IsCoupon()
+		b.isCoupon = u.IsCoupon()
 		if b.isGlobalProduct {
 			b.manufacturer = u.Manufacturer()
 			b.product = u.Product()
@@ -70,8 +78,11 @@ func getBreakdown(s string) (Upc, breakdown) {
 		if b.isDrug {
 			b.ndc = u.Ndc()
 		}
-		// b.family = u.Family()
-		// b.coupon = u.Coupon()
+		if b.isCoupon {
+			b.manufacturer = u.Manufacturer()
+			b.family = u.Family()
+			b.value = u.Value()
+		}
 	} else {
 		b.err = err.Error()
 	}
