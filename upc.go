@@ -2,7 +2,6 @@ package upc // import "github.com/vgpc/upc"
 import (
 	"errors"
 	"fmt"
-	"strconv"
 )
 
 // Upc represents a Universal Product Code.  To reduce memory
@@ -28,13 +27,18 @@ func Parse(s string) (Upc, error) {
 		return 0, ErrTooLong
 	}
 
-	n, err := strconv.ParseInt(s[0:11], 10, 64)
-	if err != nil {
-		return 0, err
-	}
-	check, err := strconv.Atoi(s[11:])
-	if err != nil {
-		return 0, err
+	var n int64
+	var check int
+	for i, b := range []byte(s) {
+		if b < 48 || b > 57 {
+			return 0, fmt.Errorf("Invalid UPC digit: %c", b)
+		}
+		if i == 11 {
+			check = int(b - 48)
+		} else {
+			n *= 10
+			n += int64(b - 48)
+		}
 	}
 	u := Upc(n)
 	if u.CheckDigit() != check {
