@@ -90,6 +90,49 @@ func getBreakdown(s string) (Upc, breakdown) {
 	return u, b
 }
 
+func TestWrong(t *testing.T) {
+	short := []string{
+		"",
+		"$19.99",
+		"J7D-00001",
+	}
+	for _, s := range short {
+		if _, err := Parse(s); err != ErrTooShort {
+			t.Errorf("%s: expected ErrTooShort got %q", s, err)
+		}
+	}
+
+	long := []string{
+		"0123456789123",
+	}
+	for _, s := range long {
+		if _, err := Parse(s); err != ErrTooLong {
+			t.Errorf("%s: expected ErrTooLong got %q", s, err)
+		}
+	}
+
+	check := []string{
+		"012345678919",
+	}
+	for _, s := range check {
+		if _, err := Parse(s); err != ErrInvalidCheckDigit {
+			t.Errorf("%s: expected ErrInvalidCheckDigit got %q", s, err)
+		}
+	}
+
+	digit := []string{
+		"x12345678912",
+		"01234567891x",
+		"01234x678912",
+		"0123456x8912",
+	}
+	for _, s := range digit {
+		if _, err := Parse(s); err == nil {
+			t.Errorf("%s: expected an error got none", s)
+		}
+	}
+}
+
 func BenchmarkParse(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		Parse("045496830434")
