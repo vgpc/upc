@@ -1,6 +1,11 @@
-# upc
+# GOlang for UPC and EAN
 
-A Go library for parsing, validating and analyzing UPCs.
+A Go library for parsing, validating and analyzing UPCs and EAN-13 codes.
+
+* Validate the accuracy of UPC and EAN codes.
+* Parse UPC codes to determine the code type and other details (Manufacturer, Coupon Value, Product Code, etc)
+
+The library works with 12 digit UPC (Universal Product Code) codes and 13 digit EAN (European Article Number) codes.
 
 # Usage
 
