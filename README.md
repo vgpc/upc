@@ -1,11 +1,17 @@
-# GOlang for UPC and EAN
+# Golang Library for UPC and EAN/GTIN
 
-A Go library for parsing, validating and analyzing UPCs and EAN-13 codes.
+A Go library for parsing, validating and analyzing UPCs and EAN-13/GTIN-13 codes.
 
-* Validate the accuracy of UPC and EAN codes.
+* Validate the accuracy of UPC and EAN/GTIN codes.
 * Parse UPC codes to determine the code type and other details (Manufacturer, Coupon Value, Product Code, etc)
 
-The library works with 12 digit UPC (Universal Product Code) codes and 13 digit EAN (European Article Number) codes.
+# Code Support
+
+* UPC (Universal Product Code)
+* EAN/GTIN 13 (European Article Numbering or Global Trade Item Number)
+* JAN (Japanese Article Numbering)
+
+The library works with 12 digit UPC (Universal Product Code) codes and 13 digit EAN (European Article Number) codes.  EAN is also referred to as GTIN or Global Trade Item Number.  The numbers are the same.
 
 # Usage
 

@@ -5,6 +5,7 @@ import "testing"
 type breakdown struct {
 	err             string
 	checkDigit      int
+	isJan           bool
 }
 
 var tests = map[string]breakdown{
@@ -16,12 +17,15 @@ var tests = map[string]breakdown{
 	},
 	"5030938121923": { // fifa 19 xbox one
 		checkDigit: 3,
+		isJan:      false,
 	},
 	"4549673590600": { // mario kart ds
 		checkDigit: 0,
+		isJan:      true,
 	},
 	"0045496738730": { // ds browser
 		checkDigit: 0,
+		isJan:      false,
 	},
 }
 
@@ -40,6 +44,7 @@ func getBreakdown(s string) (Ean, breakdown) {
 	e, err := Parse(s)
 	if err == nil {
 		b.checkDigit = e.CheckDigit()
+		b.isJan =      e.IsJan()
 	} else {
 		b.err = err.Error()
 	}

@@ -67,3 +67,17 @@ func (e Ean) CheckDigit() int {
 	}
 	return int((10 - (sum % 10)) % 10)
 }
+
+// IsJan returns true if the number begins with 45 or 49
+// JAN (Japanese Article Numbering) codes must begin with
+// one of these two numbers
+func (e Ean) IsJan() bool {
+	firstTwo := int(e / 10000000000)
+	fmt.Println("firstTwo: ", firstTwo)
+	switch firstTwo {
+	case 45, 49:
+		return true
+	default:
+		return false
+	}
+}
