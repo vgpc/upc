@@ -1,4 +1,4 @@
-package ean // import "github.com/vgpc/upc"
+package upc
 import (
 	"errors"
 	"fmt"
@@ -19,7 +19,7 @@ var ErrEanInvalidCheckDigit = errors.New("EAN has an invalid check digit")
 //     ErrEanTooShort
 //     ErrEanTooLong
 //     ErrEanInvalidCheckDigit
-func Parse(s string) (Ean, error) {
+func ParseEan(s string) (Ean, error) {
 	if len(s) < 13 {
 		return 0, ErrEanTooShort
 	}
@@ -73,7 +73,6 @@ func (e Ean) CheckDigit() int {
 // one of these two numbers
 func (e Ean) IsJan() bool {
 	firstTwo := int(e / 10000000000)
-	fmt.Println("firstTwo: ", firstTwo)
 	switch firstTwo {
 	case 45, 49:
 		return true

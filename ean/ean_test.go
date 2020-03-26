@@ -1,4 +1,4 @@
-package ean // import "github.com/vgpc/upc"
+package upc
 import "testing"
 
 // a breakdown of a UPC into each of its possible attributes
@@ -41,7 +41,7 @@ func TestBreakdown(t *testing.T) {
 
 func getBreakdown(s string) (Ean, breakdown) {
 	var b breakdown
-	e, err := Parse(s)
+	e, err := ParseEan(s)
 	if err == nil {
 		b.checkDigit = e.CheckDigit()
 		b.isJan =      e.IsJan()
@@ -59,7 +59,7 @@ func TestWrong(t *testing.T) {
 		"J7D-00001",
 	}
 	for _, s := range short {
-		if _, err := Parse(s); err != ErrEanTooShort {
+		if _, err := ParseEan(s); err != ErrEanTooShort {
 			t.Errorf("%s: expected ErrEanTooShort got %q", s, err)
 		}
 	}
@@ -68,7 +68,7 @@ func TestWrong(t *testing.T) {
 		"012345678912345",
 	}
 	for _, s := range long {
-		if _, err := Parse(s); err != ErrEanTooLong {
+		if _, err := ParseEan(s); err != ErrEanTooLong {
 			t.Errorf("%s: expected ErrEanTooLong got %q", s, err)
 		}
 	}
@@ -77,7 +77,7 @@ func TestWrong(t *testing.T) {
 		"0123456789199",
 	}
 	for _, s := range check {
-		if _, err := Parse(s); err != ErrEanInvalidCheckDigit {
+		if _, err := ParseEan(s); err != ErrEanInvalidCheckDigit {
 			t.Errorf("%s: expected ErrEanInvalidCheckDigit got %q", s, err)
 		}
 	}
@@ -89,7 +89,7 @@ func TestWrong(t *testing.T) {
 		"0123456x89128",
 	}
 	for _, s := range digit {
-		if _, err := Parse(s); err == nil {
+		if _, err := ParseEan(s); err == nil {
 			t.Errorf("%s: expected an error got none", s)
 		}
 	}
@@ -97,6 +97,6 @@ func TestWrong(t *testing.T) {
 
 func BenchmarkParse(b *testing.B) {
 	for i := 0; i < b.N; i++ {
-		Parse("045496830434")
+		ParseEan("045496830434")
 	}
 }
