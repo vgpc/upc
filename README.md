@@ -1,4 +1,5 @@
-# Golang Library for UPC and EAN/GTIN
+
+# Golang Library for UPC and EAN
 
 A Go library for parsing, validating and analyzing UPCs and EAN-13/GTIN-13 codes.
 
