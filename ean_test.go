@@ -2,13 +2,13 @@ package upc
 import "testing"
 
 // a breakdown of a UPC into each of its possible attributes
-type breakdown struct {
+type eanBreakdown struct {
 	err             string
 	checkDigit      int
 	isJan           bool
 }
 
-var tests = map[string]breakdown{
+var eanTests = map[string]eanBreakdown{
 	"0045496401771": { // mario party 8 wii
 		checkDigit: 1,
 	},
@@ -29,9 +29,9 @@ var tests = map[string]breakdown{
 	},
 }
 
-func TestBreakdown(t *testing.T) {
-	for s, expect := range tests {
-		if e, got := getBreakdown(s); got != expect {
+func EanTestBreakdown(t *testing.T) {
+	for s, expect := range eanTests {
+		if e, got := getBreakdownEan(s); got != expect {
 			t.Errorf("%s: wrong breakdown\n got: %#v\nwant: %#v\n", s, got, expect)
 		} else if e.String() != s {
 			t.Errorf("%s: wrong string: got %s", s, e)
@@ -39,8 +39,8 @@ func TestBreakdown(t *testing.T) {
 	}
 }
 
-func getBreakdown(s string) (Ean, breakdown) {
-	var b breakdown
+func getBreakdownEan(s string) (Ean, eanBreakdown) {
+	var b eanBreakdown
 	e, err := ParseEan(s)
 	if err == nil {
 		b.checkDigit = e.CheckDigit()
@@ -52,7 +52,7 @@ func getBreakdown(s string) (Ean, breakdown) {
 	return e, b
 }
 
-func TestWrong(t *testing.T) {
+func EanTestWrong(t *testing.T) {
 	short := []string{
 		"",
 		"$19.99",
@@ -95,7 +95,7 @@ func TestWrong(t *testing.T) {
 	}
 }
 
-func BenchmarkParse(b *testing.B) {
+func EanBenchmarkParse(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		ParseEan("045496830434")
 	}
