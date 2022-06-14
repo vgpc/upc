@@ -9,7 +9,7 @@ import (
 // digit.
 type Ean int64
 
-var ErrEanTooShort = errors.New("EAN is too short (must be 13 digits)")
+var ErrEanTooShort = errors.New("EAN is too short (must be 12 digits)")
 var ErrEanTooLong = errors.New("EAN is too long (must be 13 digits)")
 var ErrEanInvalidCheckDigit = errors.New("EAN has an invalid check digit")
 
@@ -20,7 +20,7 @@ var ErrEanInvalidCheckDigit = errors.New("EAN has an invalid check digit")
 //     ErrEanTooLong
 //     ErrEanInvalidCheckDigit
 func ParseEan(s string) (Ean, error) {
-	if len(s) < 13 {
+	if len(s) < 12 {
 		return 0, ErrEanTooShort
 	}
 	if len(s) > 13 {
@@ -33,11 +33,20 @@ func ParseEan(s string) (Ean, error) {
 		if b < 48 || b > 57 {
 			return 0, fmt.Errorf("Invalid UPC digit: %c", b)
 		}
-		if i == 12 {
-			check = int(b - 48)
+		if len(s) == 12 { // check if 12 digits
+			if i == 11 {
+				check = int(b - 48)
+			} else {
+				n *= 10
+				n += int64(b - 48)
+			}
 		} else {
-			n *= 10
-			n += int64(b - 48)
+			if i == 12 { // check if 13 digits
+				check = int(b - 48)
+			} else {
+				n *= 10
+				n += int64(b - 48)
+			}
 		}
 	}
 	e := Ean(n)

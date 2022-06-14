@@ -27,6 +27,12 @@ var eanTests = map[string]eanBreakdown{
 		checkDigit: 0,
 		isJan:      false,
 	},
+
+	// 12 digit codes
+	"045496390839": {
+		checkDigit: 9,
+		isJan:      false,
+	},
 }
 
 func EanTestBreakdown(t *testing.T) {
